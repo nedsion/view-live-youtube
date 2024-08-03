@@ -7,11 +7,11 @@ class Main:
         pass
 
 
-    def run(number_threads: int, stream_link: str, window_size: tuple = (300, 100)):
+    def run(number_threads: int, stream_link: str, window_size: tuple = (300, 500)):
         helper = Helper()
         threads = []
-        for i in range(number_threads):
-            x, y = helper.setPositionChrome(*window_size, number_threads)
+        for x, y in helper.setPositionChrome(*window_size, number_threads):
+            
             driver = helper.create_driver(window_size=window_size, position=(x, y))
             
             thread = threading.Thread(target=helper.watch_live, args=(driver, stream_link))
@@ -25,4 +25,4 @@ class Main:
 
 
 if __name__ == '__main__':
-    Main.run(10, 'https://www.youtube.com/watch?v=2oe_DtAOcig')
+    Main.run(10, 'https://www.youtube.com/watch?v=3UR2V67PddQ')

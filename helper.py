@@ -6,6 +6,10 @@ from selenium import webdriver
 from selenium.webdriver.chrome.options import Options
 from selenium.webdriver.common.keys import Keys
 from win32api import GetSystemMetrics
+from selenium.webdriver.common.by import By
+from selenium.webdriver.support.ui import WebDriverWait
+from selenium.webdriver.support import expected_conditions as EC
+
 
 
 
@@ -113,10 +117,40 @@ chrome.webRequest.onAuthRequired.addListener(
 
         pluginfile = os.path.abspath(pluginfile)
         return pluginfile
-        
+    
+    def get_element(self, driver, XPATH: str):
+        return driver.find_element(
+            by=By.XPATH,
+            value=XPATH,
+        )
+
+    def wait_and_find_element(self, driver, XPATH: str, timeout=100):
+        WebDriverWait(driver, timeout).until(
+            EC.presence_of_element_located(
+                (
+                    By.XPATH,
+                    XPATH,
+                )
+            )
+        )
+
+        return driver.find_element(
+            by=By.XPATH,
+            value=XPATH,
+        )
         
     def watch_live(self, driver, url):
         driver.get(url)
+        sleep(10)
+
+        # simulate send key 'K' to play video
+        body = self.wait_and_find_element(
+            driver,
+            '/html/body',
+        )
+
+        body.send_keys(Keys.SPACE)
+
         
         current_url = driver.current_url
         while current_url == url:
